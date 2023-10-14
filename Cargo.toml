@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "swu",
+    "swcli",
+]
+resolver = "2"
