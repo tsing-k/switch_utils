@@ -74,8 +74,8 @@ pub fn get_file(dir: &str) -> Result<DownloadFileType> {
         filename_list.push(String::from(filename));
     }
 
-    if file_list.len() == 0 {
-        return Err(anyhow::format_err!("no available file found"));
+    if file_list.is_empty() {
+        Err(anyhow::format_err!("no available file found"))
     } else if file_list.len() == 1 {
         Ok(file_list[0].clone())
     } else {
@@ -105,10 +105,10 @@ pub fn download(file: DownloadFileType) -> Result<()> {
     let sg = get_sg()?;
 
     // 关halt
-    call(format!("ps3cli /psw0 custom pcieswitch halt off").as_str())?;
+    call("ps3cli /psw0 custom pcieswitch halt off")?;
 
     // 关chipid check
-    call(format!("ps3cli /psw0 custom pcieswitch chipid off").as_str())?;
+    call("ps3cli /psw0 custom pcieswitch chipid off")?;
 
     match file {
         DownloadFileType::Bootloader(file) => {
