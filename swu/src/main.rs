@@ -7,7 +7,7 @@ use log4rs::Config;
 use log4rs::config::{Appender, Root};
 use log4rs::encode::pattern::PatternEncoder;
 use log::{error, info, LevelFilter};
-use anyhow::{Result, Error};
+use anyhow::Result;
 
 mod file;
 use file::*;
@@ -18,8 +18,8 @@ use cli::Cli;
 mod utils;
 
 fn log_init() -> Result<()> {
-    let log_path = "./log/log_test.log";
-    let archive_path = "./archive/log_test_{}.log";
+    let log_path = "/var/log//swu/swu.log";
+    let archive_path = "/var/log/swu/archive/swu_{}.log";
     let log_pattern = "[{d(%Y-%m-%d %H:%M:%S %Z)}][{f}:{L}][{l}]: {m}{n}";
 
     let trigger = SizeTrigger::new(0x6400000);  // 100M
