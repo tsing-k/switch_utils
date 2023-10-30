@@ -1,6 +1,6 @@
 use anyhow::{Ok, Result};
 use dialoguer::Select;
-use std::{fs::File, io::Read};
+use std::{fs, fs::File, io::Read};
 use walkdir::WalkDir;
 
 use crate::utils::{call, get_sg};
@@ -26,13 +26,13 @@ impl DownloadFileType {
         }
 
         let magic = u32::from_le_bytes(data[0..4].try_into()?);
-        let image_len = u32::from_le_bytes(data[16..20].try_into()?);
         let image_type = u32::from_le_bytes(data[20..24].try_into()?);
+        let size = fs::metadata(file)?.len();
 
-        match (magic, image_len, image_type) {
+        match (magic, size, image_type) {
             (0x327f68cd, _, _) => Ok(DownloadFileType::Package(String::from(file))),
             (0x327f68ab, len, 2) => {
-                if len == 0x3ec00 {
+                if len == 0x2000000 {
                     Ok(DownloadFileType::Flash32M(String::from(file)))
                 } else {
                     Ok(DownloadFileType::Bootloader(String::from(file)))
